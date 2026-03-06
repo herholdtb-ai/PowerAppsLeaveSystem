@@ -1,0 +1,1 @@
+{"workflow":"ApprovalNotificationWorkflow","trigger":"When an item is created or modified","actions":[{"type":"SendApproval","to":"manager@example.com","subject":"Approval Request","body":"Please approve the request."},{"type":"Notify","to":"requester@example.com","message":"Your request has been submitted for approval."}]}
