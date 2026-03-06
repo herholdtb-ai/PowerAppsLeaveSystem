@@ -1,0 +1,1 @@
+{\n  "workflow": {\n    "name": "Leave Balance Check",\n    "trigger": {\n      "type": "manual",\n      "parameters": {\n        "userId": "string"\n      }\n    },\n    "actions": [\n      {\n        "type": "getLeaveBalance",\n        "parameters": {\n          "userId": "${trigger.parameters.userId}"\n        }\n      }\n    ]\n  }\n}
