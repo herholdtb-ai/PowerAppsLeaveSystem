@@ -1,31 +1,43 @@
-# Implementation Checklist: Power Leave (O365 Integrated)
+# Implementation Checklist: Power Leave (Integrated)
 
-## Phase 1: Data Backend
-- [ ] **SharePoint List Creation**
-  - [ ] Create list `LeaveRequests`.
-  - [ ] Add columns: `RequesterEmail` (Text), `Department` (Text), `SupervisorEmail` (Text), `LeaveType` (Choice), `StartDate` (Date), `EndDate` (Date), `Status` (Choice).
+## Phase 1: SharePoint Setup
+- [ ] **Create List**
+  - [ ] Name: `LeaveRequests`
+- [ ] **Add Columns**
+  - [ ] `RequesterEmail` (Single line text)
+  - [ ] `SupervisorEmail` (Single line text)
+  - [ ] `StartDate` (Date)
+  - [ ] `EndDate` (Date)
+  - [ ] `Reason` (Multiple lines of text, Plain text)
+  - [ ] `Status` (Choice: Pending, Approved, Denied)
   - [ ] *Ref:* [SharePointListSchema.json](./SharePoint/SharePointListSchema.json)
 
-## Phase 2: Power Apps Development
-- [ ] **Data Integration**
-  - [ ] Connect `SharePoint` list.
+## Phase 2: Power App Development
+- [ ] **Connectors**
+  - [ ] Connect `SharePoint` (LeaveRequests list).
   - [ ] Connect `Office 365 Users`.
-- [ ] **User Context**
-  - [ ] Set `OnStart`: `Set(varCurrentUser, Office365Users.MyProfileV2())`.
-- [ ] **Form Construction**
-  - [ ] Create Combo Box for Supervisor: `Office365Users.SearchUser({searchTerm: Self.SearchText})`.
-  - [ ] Bind Leave Inputs to SharePoint fields.
+- [ ] **Global Logic**
+  - [ ] Set `App.OnStart`: `Set(varCurrentUser, Office365Users.MyProfileV2())`.
+- [ ] **UI Components**
+  - [ ] Display `varCurrentUser.displayName` in a Label.
+  - [ ] Create Supervisor Combo Box: `Office365Users.SearchUser({searchTerm: Self.SearchText})`.
+  - [ ] Create Multi-line Text Input for `Reason`.
+- [ ] **Submit Button**
+  - [ ] Implement `Patch` function to write to SharePoint.
   - [ ] *Ref:* [LeaveRequestApp.powerapps](./PowerApps/LeaveRequestApp.powerapps)
 
-## Phase 3: Workflow Automation
-- [ ] **Approval Flow**
-  - [ ] Trigger: New SharePoint Item.
-  - [ ] Action: Start Approval assigned to `SupervisorEmail`.
-  - [ ] Action: Update Item Status based on outcome.
+## Phase 3: Approval Workflow
+- [ ] **Trigger**
+  - [ ] SharePoint: `When an item is created`.
+- [ ] **Approval Action**
+  - [ ] Action: `Start and wait for an approval`.
+  - [ ] Assigned to: `SupervisorEmail` dynamic value.
+- [ ] **Outcome Update**
+  - [ ] Update SharePoint item `Status` based on response.
   - [ ] *Ref:* [ApprovalNotificationFlow.json](./PowerAutomate/ApprovalNotificationFlow.json)
 
-## Phase 4: Deployment
-- [ ] **Permissioning**
-  - [ ] Grant "Contribute" access to the SharePoint list for all @hsgrabouw.co.za users.
-- [ ] **App Launch**
-  - [ ] Save and Publish version 1.0.
+## Phase 4: Launch
+- [ ] **Permissions**
+  - [ ] Grant staff "Contribute" access to SharePoint List.
+- [ ] **Publishing**
+  - [ ] Save and Publish the App version 1.0.
