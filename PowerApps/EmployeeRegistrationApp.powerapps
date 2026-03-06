@@ -1,0 +1,19 @@
+// Employee Registration App Configuration
+
+{
+  "appName": "Employee Registration",
+  "version": "1.0",
+  "components": {
+    "form": {
+      "fields": [
+        {"name": "First Name", "type": "text", "required": true},
+        {"name": "Last Name", "type": "text", "required": true},
+        {"name": "Email", "type": "email", "required": true},
+        {"name": "Phone Number", "type": "tel", "required": false},
+        {"name": "Department", "type": "dropdown", "options": ["HR", "IT", "Finance", "Sales"], "required": true}
+      ],
+      "submitButton": "Register",
+      "onSubmit": "submitForm"
+    }
+  }
+}
