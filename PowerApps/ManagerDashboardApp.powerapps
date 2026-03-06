@@ -1,0 +1,1 @@
+{"name": "ManagerDashboardApp", "version": "1.0", "components": [{"type": "Dashboard", "title": "Manager Dashboard", "controls": [{"type": "Chart", "data": {"source": "EmployeeData", "fields": ["EmployeeID", "PerformanceScore"]}}, {"type": "Button", "action": "ApproveLeave", "label": "Approve Leave"}]}]}
