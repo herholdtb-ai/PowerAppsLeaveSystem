@@ -1,0 +1,28 @@
+// Employee History App Configuration and Code
+
+// App ID and description
+const appId = "EmployeeHistoryApp";
+const appDescription = "An app to track employee history.";
+
+// Data structure to hold employee history
+let employeeHistory = [];
+
+// Function to add employee history record
+function addEmployeeRecord(employeeId, action, timestamp) {
+    employeeHistory.push({
+        employeeId: employeeId,
+        action: action,
+        timestamp: timestamp
+    });
+}
+
+// Function to retrieve employee history
+function getEmployeeHistory(employeeId) {
+    return employeeHistory.filter(record => record.employeeId === employeeId);
+}
+
+// Example usage
+addEmployeeRecord(1, "Hired", "2026-03-06 07:00:44");
+addEmployeeRecord(1, "Promoted", "2026-03-07 08:30:00");
+
+console.log(getEmployeeHistory(1));
