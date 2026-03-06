@@ -1,0 +1,24 @@
+// LeaveRequestApp Configuration and Code
+
+let leaveRequestAppConfig = {
+    title: "Leave Request Application",
+    version: "1.0",
+    fields: [
+        { label: "Employee Name", type: "text", required: true },
+        { label: "Leave Type", type: "dropdown", options: ["Sick Leave", "Vacation", "Personal Leave"], required: true },
+        { label: "Start Date", type: "date", required: true },
+        { label: "End Date", type: "date", required: true },
+        { label: "Reason", type: "textarea", required: true },
+    ],
+    submitButton: {
+        label: "Submit Request",
+        action: "submitLeaveRequest"
+    }
+};
+
+function submitLeaveRequest(data) {
+    // Code to handle the leave request submission
+    console.log("Leave request submitted", data);
+}
+
+export default leaveRequestAppConfig;
