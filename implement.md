@@ -1,43 +1,42 @@
-# Implementation Checklist: Power Leave (Integrated)
+# Implementation Checklist: Power Leave (Two-Stage Approval)
 
 ## Phase 1: SharePoint Setup
 - [ ] **Create List**
   - [ ] Name: `LeaveRequests`
 - [ ] **Add Columns**
-  - [ ] `RequesterEmail` (Single line text)
-  - [ ] `SupervisorEmail` (Single line text)
+  - [ ] `RequesterEmail` (Text)
+  - [ ] `SupervisorEmail` (Text)
   - [ ] `StartDate` (Date)
   - [ ] `EndDate` (Date)
-  - [ ] `Reason` (Multiple lines of text, Plain text)
-  - [ ] `Status` (Choice: Pending, Approved, Denied)
+  - [ ] `ReasonDetails` (Multiline Text, Plain)
+  - [ ] `OverallStatus` (Choice: Awaiting Support, Awaiting Principal, Approved, Rejected, Not Supported)
   - [ ] *Ref:* [SharePointListSchema.json](./SharePoint/SharePointListSchema.json)
 
 ## Phase 2: Power App Development
 - [ ] **Connectors**
-  - [ ] Connect `SharePoint` (LeaveRequests list).
-  - [ ] Connect `Office 365 Users`.
-- [ ] **Global Logic**
-  - [ ] Set `App.OnStart`: `Set(varCurrentUser, Office365Users.MyProfileV2())`.
-- [ ] **UI Components**
-  - [ ] Display `varCurrentUser.displayName` in a Label.
-  - [ ] Create Supervisor Combo Box: `Office365Users.SearchUser({searchTerm: Self.SearchText})`.
-  - [ ] Create Multi-line Text Input for `Reason`.
-- [ ] **Submit Button**
-  - [ ] Implement `Patch` function to write to SharePoint.
+  - [ ] Connect `SharePoint` & `Office 365 Users`.
+- [ ] **Form Construction**
+  - [ ] User Header: `varCurrentUser.displayName`.
+  - [ ] Supervisor Picker: `Office365Users.SearchUser`.
+  - [ ] Reason Input: Multi-line text.
+- [ ] **Submit Logic**
+  - [ ] Implement `Patch` with `OverallStatus` set to "Awaiting Support".
   - [ ] *Ref:* [LeaveRequestApp.powerapps](./PowerApps/LeaveRequestApp.powerapps)
 
-## Phase 3: Approval Workflow
+## Phase 3: Workflow Logic
 - [ ] **Trigger**
   - [ ] SharePoint: `When an item is created`.
-- [ ] **Approval Action**
-  - [ ] Action: `Start and wait for an approval`.
-  - [ ] Assigned to: `SupervisorEmail` dynamic value.
-- [ ] **Outcome Update**
-  - [ ] Update SharePoint item `Status` based on response.
-  - [ ] *Ref:* [ApprovalNotificationFlow.json](./PowerAutomate/ApprovalNotificationFlow.json)
+- [ ] **Conditional Branching**
+  - [ ] IF `SupervisorEmail` == `bezuidenhouth@hsgrabouw.co.za` -> Skip to Principal Approval.
+- [ ] **Supervisor Stage**
+  - [ ] Action: Approval (Support/Not-Support).
+  - [ ] Update Status based on outcome.
+- [ ] **Principal Stage**
+  - [ ] Action: Approval (Approve/Reject) assigned to `bezuidenhouth@hsgrabouw.co.za`.
+  - [ ] *Ref:* [LeaveRequestApprovalFlow.json](./PowerAutomate/LeaveRequestApprovalFlow.json)
 
-## Phase 4: Launch
+## Phase 4: Deployment
 - [ ] **Permissions**
-  - [ ] Grant staff "Contribute" access to SharePoint List.
-- [ ] **Publishing**
-  - [ ] Save and Publish the App version 1.0.
+  - [ ] Grant staff "Contribute" access to SharePoint.
+- [ ] **Publish**
+  - [ ] Save and Publish App v1.0.
